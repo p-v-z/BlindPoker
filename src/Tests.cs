@@ -2,8 +2,9 @@ namespace BlindPoker;
 
 public class Tests
 {
-	private readonly HandSolver _handSolver = new HandSolver();
-	[SetUp]	public void Setup() {}
+	private readonly IPokerSolver _pokerSolver = new HandSolver();
+	
+	[SetUp] public void Setup() {}
 	
 	/// <summary>
 	/// Tests that the correct error is thrown when the amount of cards in a hand is incorrect
@@ -13,11 +14,11 @@ public class Tests
     {
         // Arrange
         var a = new[] { 1, 2, 3, 4, 5 };
-		var b = new[] { 1, 2, 3, 4 };
+		var b = new[] { 1, 2, 3, 4 }; // 4 cards instead of 5
 
 		// Act
-		var resultA = _handSolver.PokerHandSolver(a, b);
-		var resultB = _handSolver.PokerHandSolver(b, a);
+		var resultA = _pokerSolver.PokerHandSolver(a, b);
+		var resultB = _pokerSolver.PokerHandSolver(b, a);
 	    
 		// Assert
         Assert.Multiple(() =>
@@ -35,6 +36,67 @@ public class Tests
 	[Test]
 	public void TestInvalidInput()
 	{
+		var c = new[] { 1, 2, 3, 1, 7 };
+		var b = new[] { 1, 2, 3, 0, 7 }; // 0 is not a valid card
+		var a = new[] { 1, 15, 3, 4, 5 }; // 15 is not a valid card
 		
+		// Act
+		var resultA = _pokerSolver.PokerHandSolver(a, b);
+		var resultB = _pokerSolver.PokerHandSolver(a, c);
+		var resultC = _pokerSolver.PokerHandSolver(b, c);
+		
+		// Assert
+		Assert.Multiple(() =>
+		{
+			Assert.That(resultA, Is.EqualTo(-1));
+			Assert.That(resultB, Is.EqualTo(-1));
+			Assert.That(resultC, Is.EqualTo(-1));
+		});
 	}
+
+	private readonly int[] _high = { 1, 3, 5, 7, 9 }; // High card 9
+	private readonly int[] _pair = { 1, 3, 5, 7, 7 }; // Pair
+	private readonly int[] _pairB = { 1, 1, 5, 7, 9 }; // Different pair
+	
+	[Test] public void PairBeatsHigh() => Assert.That(_pokerSolver.PokerHandSolver(_high, _pair), Is.EqualTo(2));
+	[Test] public void HighLosesPair() => Assert.That(_pokerSolver.PokerHandSolver(_pair, _high), Is.EqualTo(1));
+	[Test] public void PairTie() => Assert.That(_pokerSolver.PokerHandSolver(_pair, _pair), Is.EqualTo(0));
+	[Test] public void PairTieVariant() => Assert.That(_pokerSolver.PokerHandSolver(_pair, _pairB), Is.EqualTo(0));
+	
+	
+	private readonly int[] _twoPair = { 1, 3, 3, 7, 7 }; // Two pair
+	
+	[Test] public void TwoBeatsPair() => Assert.That(_pokerSolver.PokerHandSolver(_pair, _twoPair), Is.EqualTo(2));
+	[Test] public void PairLosesTwo() => Assert.That(_pokerSolver.PokerHandSolver(_twoPair, _pair), Is.EqualTo(1));
+	
+	private readonly int[] _threeOfAKind = { 1, 3, 7, 7, 7 }; // Three of a kind
+	
+	[Test] public void ThreeBeatsTwo() => Assert.That(_pokerSolver.PokerHandSolver(_twoPair, _threeOfAKind), Is.EqualTo(2));
+	[Test] public void TwoLosesThree() => Assert.That(_pokerSolver.PokerHandSolver(_threeOfAKind, _twoPair), Is.EqualTo(1));
+	
+	private readonly int[] _straight = { 1, 2, 3, 4, 5 }; // Straight 
+	
+	[Test] public void StraightBeatsThree() => Assert.That(_pokerSolver.PokerHandSolver(_threeOfAKind, _straight), Is.EqualTo(2));
+	[Test] public void ThreeLosesStraight() => Assert.That(_pokerSolver.PokerHandSolver(_straight, _threeOfAKind), Is.EqualTo(1));
+	
+	private readonly int[] _fullHouse = { 1, 1, 9, 9, 9 }; // Full house
+	
+	[Test] public void FullBeatsStraight() => Assert.That(_pokerSolver.PokerHandSolver(_straight, _fullHouse), Is.EqualTo(2));
+	[Test] public void StraightLosesFull() => Assert.That(_pokerSolver.PokerHandSolver(_fullHouse, _straight), Is.EqualTo(1));
+	
+	private readonly int[] _fourOfAKind = { 1, 1, 1, 1, 9 }; // Four of a kind
+	private readonly int[] _fourOfAKindB = { 5, 2, 2, 2, 2 }; // Different four of a kind
+	
+	[Test] public void FourBeatsFull() => Assert.That(_pokerSolver.PokerHandSolver(_fullHouse, _fourOfAKind), Is.EqualTo(2));
+	[Test] public void FullLosesFour() => Assert.That(_pokerSolver.PokerHandSolver(_fourOfAKind, _fullHouse), Is.EqualTo(1));
+	[Test] public void CollectedTie() => Assert.That(_pokerSolver.PokerHandSolver(_fourOfAKind, _fourOfAKindB), Is.EqualTo(0));
+
+	private readonly int[] _highB = { 1, 3, 5, 8, 9 }; // _high with 2nd highest card changed
+	private readonly int[] _highC = { 2, 3, 5, 7, 9 }; // Lower high than _high
+	private readonly int[] _highD = { 3, 4, 5, 7, 9 }; // Higher than _highC on smallest card
+	
+	[Test] public void ExactTie() => Assert.That(_pokerSolver.PokerHandSolver(_high, _high), Is.EqualTo(0));
+	[Test] public void HighCardTie() => Assert.That(_pokerSolver.PokerHandSolver(_high, _highB), Is.EqualTo(2)); // B 2nd highest card is higher
+	[Test] public void HighCardAce() => Assert.That(_pokerSolver.PokerHandSolver(_high, _highC), Is.EqualTo(1)); // A high is ace
+	[Test] public void HighCardSmall() => Assert.That(_pokerSolver.PokerHandSolver(_highC, _highD), Is.EqualTo(2)); // Smaller card is higher
 }

@@ -10,11 +10,3 @@ public enum PokerHand
 	FullHouse = 5,
 	FourOfAKind = 6
 }
-
-[Obsolete]
-public enum HandTypes
-{
-	None, // high card
-	Collection, // doubles, triples, quads, full house
-	Sequence, // straight
-}
