@@ -60,9 +60,6 @@ public class HandSolver : IPokerSolver
 	/// <summary>
 	/// This function takes a single hand of cards, and returns the ranking of the hand.
 	/// </summary>
-	/// <param name="handA"></param>
-	/// <param name="hand"></param>
-	/// <returns></returns>
 	private int GetHandRanking(bool handA, List<int> hand)
 	{
 		// Make sure that the hands are valid
