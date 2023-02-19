@@ -1,5 +1,8 @@
 ﻿namespace BlindPoker;
 
+/// <summary>
+/// Describes a single card
+/// </summary>
 public class Card
 {
 	public int Value = 0;

@@ -1,5 +1,8 @@
 ﻿namespace BlindPoker;
 
+/// <summary>
+/// Describes a collection of cards that match
+/// </summary>
 public class MatchingCollection
 {
 	public readonly int CardNumber;

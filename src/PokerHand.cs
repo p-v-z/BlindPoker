@@ -1,5 +1,8 @@
 ﻿namespace BlindPoker;
 
+/// <summary>
+/// All possible poker hands
+/// </summary>
 public enum PokerHand
 {
 	HighCard = 0,
