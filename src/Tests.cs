@@ -39,11 +39,13 @@ public class Tests
 		var c = new[] { 1, 2, 3, 1, 7 };
 		var b = new[] { 1, 2, 3, 0, 7 }; // 0 is not a valid card
 		var a = new[] { 1, 15, 3, 4, 5 }; // 15 is not a valid card
+		var d = new[] { 1, 1, 1, 1, 1 }; // 5 cards of the same value
 		
 		// Act
 		var resultA = _pokerSolver.PokerHandSolver(a, b);
 		var resultB = _pokerSolver.PokerHandSolver(a, c);
 		var resultC = _pokerSolver.PokerHandSolver(b, c);
+		var resultD = _pokerSolver.PokerHandSolver(a, d);
 		
 		// Assert
 		Assert.Multiple(() =>
@@ -51,6 +53,7 @@ public class Tests
 			Assert.That(resultA, Is.EqualTo(-1));
 			Assert.That(resultB, Is.EqualTo(-1));
 			Assert.That(resultC, Is.EqualTo(-1));
+			Assert.That(resultD, Is.EqualTo(-1));
 		});
 	}
 
