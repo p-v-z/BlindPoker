@@ -82,7 +82,7 @@ public class Tests
 	[Test] public void ThreeBeatsTwo() => Assert.That(_pokerSolver.PokerHandSolver(_twoPair, _threeOfAKind), Is.EqualTo(2));
 	[Test] public void TwoLosesThree() => Assert.That(_pokerSolver.PokerHandSolver(_threeOfAKind, _twoPair), Is.EqualTo(1));
 	[Test] public void DifferentThrees() => Assert.That(_pokerSolver.PokerHandSolver(_threeOfAKind, _threeOfAKindB), Is.EqualTo(1));
-	[Test]public void ThreeTie() => Assert.That(_pokerSolver.PokerHandSolver(_threeOfAKind, _threeOfAKind), Is.EqualTo(0));
+	[Test] public void ThreeTie() => Assert.That(_pokerSolver.PokerHandSolver(_threeOfAKind, _threeOfAKind), Is.EqualTo(0));
 	
 	
 	private readonly int[] _straight = { 1, 2, 3, 4, 5 }; // Straight 
@@ -95,7 +95,7 @@ public class Tests
 	
 	private readonly int[] _fullHouse = { 1, 1, 9, 9, 9 }; // Full house
 	private readonly int[] _fullHouseB = { 10, 10, 10, 9, 9 }; // Higher house
-	private readonly int[] _fullHouseC = { 10, 10, 1, 1, 1 }; // Higher house
+	private readonly int[] _fullHouseC = { 10, 10, 1, 1, 1 }; // Smaller value on big pack
 	[Test] public void FullBeatsStraight() => Assert.That(_pokerSolver.PokerHandSolver(_straight, _fullHouse), Is.EqualTo(2));
 	[Test] public void StraightLosesFull() => Assert.That(_pokerSolver.PokerHandSolver(_fullHouse, _straight), Is.EqualTo(1));
 	[Test] public void DifferentHouses() => Assert.That(_pokerSolver.PokerHandSolver(_fullHouse, _fullHouseB), Is.EqualTo(2));
