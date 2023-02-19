@@ -75,21 +75,7 @@ public class HandSolver : IPokerSolver
 	{
 		var p1Ordered = _p1Hand.Collections.OrderByDescending(c => c.CardNumber).ToList();
 		var p2Ordered = _p2Hand.Collections.OrderByDescending(c => c.CardNumber).ToList();
-		var p1Highest = p1Ordered.First().CardNumber;
-		var p2Highest = p2Ordered.First().CardNumber;
-		if (p1Highest != p2Highest)
-		{
-			return p1Highest > p2Highest ? 1 : 2;
-		}
-		
-		if (p1Ordered.Count > 1)
-		{
-			var p1Second = p1Ordered.Last().CardNumber;
-			var p2Second = p2Ordered.Last().CardNumber;
-			return p1Second == p2Second ? 0 : p1Second > p2Second ? 1 : 2;
-		}
-
-		return 0;
+		return GetHighestCard(p1Ordered, p2Ordered);
 	}
 	
 	/// <summary>
@@ -100,9 +86,35 @@ public class HandSolver : IPokerSolver
 	{
 		var p1Ordered = _p1Hand.Collections.OrderByDescending(c => c.Amount).ToList();
 		var p2Ordered = _p2Hand.Collections.OrderByDescending(c => c.Amount).ToList();
+		return GetHighestCard(p1Ordered, p2Ordered);
+	}
+	
+	/// <summary>
+	/// Get the ranking of the hand based on the lists provided
+	/// </summary>
+	private static int GetHighestCard(List<MatchingCollection> p1Ordered, List<MatchingCollection> p2Ordered)
+	{
 		var p1Highest = p1Ordered.First().CardNumber;
 		var p2Highest = p2Ordered.First().CardNumber;
-		return p1Highest == p2Highest ? 0 : p1Highest > p2Highest ? 1 : 2;
+		if (p1Highest != p2Highest)
+		{
+			return p1Highest > p2Highest ? 1 : 2;
+		}
+		return CompareLastCollection(p1Ordered, p2Ordered);
+	}
+
+	/// <summary>
+	/// Makes sure there is a 2nd collection, then uses that to determine the highest card
+	/// </summary>
+	private static int CompareLastCollection(List<MatchingCollection> p1Ordered, List<MatchingCollection> p2Ordered)
+	{
+		if (p1Ordered.Count > 1)
+		{
+			var p1Second = p1Ordered.Last().CardNumber;
+			var p2Second = p2Ordered.Last().CardNumber;
+			return p1Second == p2Second ? 0 : p1Second > p2Second ? 1 : 2;
+		}
+		return 0;
 	}
 
 	/// <summary>

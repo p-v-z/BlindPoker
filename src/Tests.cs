@@ -96,10 +96,12 @@ public class Tests
 	private readonly int[] _fullHouse = { 1, 1, 9, 9, 9 }; // Full house
 	private readonly int[] _fullHouseB = { 10, 10, 10, 9, 9 }; // Higher house
 	private readonly int[] _fullHouseC = { 10, 10, 1, 1, 1 }; // Smaller value on big pack
+	private readonly int[] _fullHouseD = { 2, 2, 9, 9, 9 }; // Same value on big pack
 	[Test] public void FullBeatsStraight() => Assert.That(_pokerSolver.PokerHandSolver(_straight, _fullHouse), Is.EqualTo(2));
 	[Test] public void StraightLosesFull() => Assert.That(_pokerSolver.PokerHandSolver(_fullHouse, _straight), Is.EqualTo(1));
 	[Test] public void DifferentHouses() => Assert.That(_pokerSolver.PokerHandSolver(_fullHouse, _fullHouseB), Is.EqualTo(2));
 	[Test] public void UsesBiggestPack() => Assert.That(_pokerSolver.PokerHandSolver(_fullHouse, _fullHouseC), Is.EqualTo(1));
+	[Test] public void UsesSmallPack() => Assert.That(_pokerSolver.PokerHandSolver(_fullHouse, _fullHouseD), Is.EqualTo(2));
 	[Test] public void HouseTie() => Assert.That(_pokerSolver.PokerHandSolver(_fullHouse, _fullHouse), Is.EqualTo(0));
 
 	
